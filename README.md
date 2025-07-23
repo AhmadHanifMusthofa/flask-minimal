@@ -1,63 +1,117 @@
+Berikut ini adalah versi `README.md` dalam Bahasa Indonesia yang **sudah siap ditempel langsung** ke proyek Anda:
+
+````markdown
 # flask-minimal
 
-A minimal Flask starter project designed to help you quickly set up a clean, simple, and efficient web application. This project is structured to keep things lightweight and focuses on productivity, with all your code contained in a single file (`app.py`), along with basic templates and static assets.
+Proyek starter Flask minimal yang dirancang untuk membantu Anda dengan cepat mengatur aplikasi web yang bersih, sederhana, dan efisien. Semua kode berada dalam satu file (`app.py`) dengan struktur template dan aset statis dasar.
 
+## Fitur
 
-## Features
-- Single-file Flask application (`app.py`) to maximize productivity and simplicity.
-- Basic HTML template structure with minimal styling and JavaScript.
-- Simple and intuitive project setup with no unnecessary complexity.
-- Easily customizable for rapid development of web applications.
+- Aplikasi Flask dalam satu file (`app.py`) untuk memaksimalkan produktivitas dan kesederhanaan.
+- Struktur HTML dasar dengan styling dan JavaScript minimal.
+- Pengaturan proyek yang sederhana dan intuitif tanpa kompleksitas yang berlebihan.
+- Mudah dikustomisasi untuk pengembangan aplikasi web yang cepat.
 
-## Preparation
+## Persiapan
+
 ```bash
 sudo apt update
 sudo apt install python3 python3-venv python3-pip -y
+````
+
+## Instalasi
+
+1. **Clone repositori:**
+
+```bash
+git clone https://github.com/yourusername/flask-minimal.git
+cd flask-minimal
 ```
 
-## Installation
+2. **Buat virtual environment (disarankan):**
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/flask-minimal.git
-   cd flask-minimal
-   ```
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
 
-2. Create a virtual environment (recommended):
-   ```bash
-   python3 -m venv venv
-   source venv/bin/activate
-   ```
+3. **Instal dependensi yang dibutuhkan:**
 
-3. Install the required dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+pip install -r requirements.txt
+```
 
-4. Run the app:
-   ```bash
-   python app.py
-   ```
+4. **Jalankan aplikasi:**
 
-The Flask app will start, and you can view it by navigating to http://localhost:5000 in your browser.
+```bash
+python app.py
+```
 
-## Usage
+Aplikasi Flask akan berjalan dan dapat diakses melalui browser di:
+👉 [http://localhost:5000](http://localhost:5000)
 
-This starter project is ready to be used as a foundation for building web applications. The app.py file contains all the Flask routes and logic, making it simple to expand and customize. You can add more templates, routes, or static files as needed.
+## Menjalankan Otomatis Setelah Reboot
 
-## Customization
-You can easily modify:
+Agar aplikasi Flask otomatis berjalan setelah server Ubuntu direboot, Anda bisa menggunakan systemd:
 
- - The HTML structure in `templates/index.html`
- - The styling in `static/style.css`
- - The interactivity in `static/script.js`
+### 1. Buat file service:
 
-Feel free to update the app.py file to add your routes or any additional logic to fit your needs.
+```bash
+sudo nano /etc/systemd/system/flask-minimal.service
+```
 
-## License
-This project is licensed under the MIT License.
+### 2. Tempelkan konfigurasi berikut (sesuaikan path dan user):
 
-## Contributing
-Feel free to fork this repository and create pull requests if you have improvements or bug fixes. If you have any suggestions, open an issue, and we’ll discuss it!
+```ini
+[Unit]
+Description=Flask Minimal App
+After=network.target
 
-This project is built with simplicity and efficiency in mind, perfect for quickly starting small web apps or prototypes with minimal overhead.
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/flask-minimal
+ExecStart=/home/ubuntu/flask-minimal/venv/bin/python /home/ubuntu/flask-minimal/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+> Gantilah `/home/ubuntu/flask-minimal` dengan direktori proyek Anda, dan `User=ubuntu` dengan nama user di server Anda.
+
+### 3. Aktifkan dan jalankan servicenya:
+
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable flask-minimal
+sudo systemctl start flask-minimal
+```
+
+Dengan ini, Anda tidak perlu lagi menjalankan langkah `source venv/bin/activate` dan `python app.py` setiap kali server direboot — aplikasi akan otomatis dijalankan oleh sistem.
+
+## Kustomisasi
+
+Anda dapat mengedit:
+
+* Template HTML di `templates/index.html`
+* CSS di `static/style.css`
+* JavaScript di `static/script.js`
+* Logika dan routing di `app.py`
+
+## Lisensi
+
+Proyek ini dilisensikan di bawah MIT License.
+
+## Kontribusi
+
+Silakan fork dan ajukan pull request jika Anda memiliki ide atau perbaikan. Untuk saran atau laporan masalah, silakan buka *issue* di repositori ini.
+
+---
+
+Proyek ini cocok untuk memulai aplikasi web atau prototipe kecil dengan cepat, ringan, dan efisien.
+
+```
+
+Jika Anda ingin, saya juga bisa bantu generate isi `flask-minimal.service` yang disesuaikan langsung berdasarkan username dan path Anda. Mau?
+```
