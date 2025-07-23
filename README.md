@@ -49,6 +49,8 @@ Aplikasi Flask akan berjalan, dan Anda dapat mengaksesnya melalui browser di ala
 
 ## Menjalankan Otomatis Setelah Reboot
 
+### Menjalankan Otomatis Menggunakan crontab
+
 Agar aplikasi Flask dapat berjalan otomatis setiap kali server dinyalakan ulang (reboot), Anda bisa menggunakan cron `@reboot`.
 
 ### Langkah-langkah:
