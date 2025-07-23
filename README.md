@@ -71,6 +71,69 @@ Agar aplikasi Flask dapat berjalan otomatis setiap kali server dinyalakan ulang 
 
 Setelah ini, aplikasi Flask Anda akan otomatis dijalankan setiap kali server direboot, tanpa perlu mengetik ulang perintah aktivasi environment dan menjalankan `app.py` secara manual.
 
+
+### Menjalankan Otomatis Menggunakan `systemd` (Opsional)
+
+Alternatif lain selain `crontab` adalah menggunakan `systemd` untuk membuat service yang akan otomatis dijalankan saat booting.
+
+#### 1. Buat file service
+
+Jalankan:
+
+```bash
+sudo nano /etc/systemd/system/flask-minimal.service
+```
+
+Isi file-nya seperti ini (ganti path dengan path proyek kamu):
+
+```ini
+[Unit]
+Description=Flask Minimal Web App
+After=network.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/flask-minimal
+ExecStart=/home/ubuntu/flask-minimal/venv/bin/python /home/ubuntu/flask-minimal/app.py
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+```
+
+> **Catatan**:
+>
+> * Ganti `ubuntu` pada `User=` dengan nama user kamu.
+> * Pastikan path ke `python` dan `app.py` benar.
+
+#### 2. Reload systemd & aktifkan service
+
+```bash
+sudo systemctl daemon-reexec
+sudo systemctl daemon-reload
+sudo systemctl enable flask-minimal
+sudo systemctl start flask-minimal
+```
+
+#### 3. Cek status aplikasi
+
+```bash
+sudo systemctl status flask-minimal
+```
+
+#### 4. Melihat log output Flask
+
+```bash
+journalctl -u flask-minimal -f
+```
+
+Setelah langkah ini, setiap kali server dinyalakan ulang (`reboot`), Flask akan langsung jalan secara otomatis via `systemd`.
+
+---
+
+Kalau kamu mau, saya bisa gabungkan versi systemd ini langsung ke README final yang tadi. Mau?
+
+
 ## Penggunaan
 
 Proyek ini siap digunakan sebagai fondasi untuk membangun aplikasi web. File `app.py` sudah berisi semua rute dan logika dasar Flask, sehingga mudah untuk dikembangkan dan disesuaikan. Anda dapat menambahkan lebih banyak template, rute, atau file statis sesuai kebutuhan.
